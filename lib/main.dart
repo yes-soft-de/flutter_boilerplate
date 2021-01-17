@@ -1,28 +1,24 @@
+import 'package:c4d/module_chat/chat_module.dart';
+import 'package:c4d/module_localization/service/localization_service/localization_service.dart';
+import 'package:c4d/module_theme/service/theme_service/theme_service.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:inject/inject.dart';
-import 'package:swaptime_flutter/camera/camera_module.dart';
-import 'package:swaptime_flutter/games_module/games_module.dart';
-import 'package:swaptime_flutter/module_auth/auth_module.dart';
-import 'package:swaptime_flutter/module_chat/chat_module.dart';
-import 'package:swaptime_flutter/module_home/home.routes.dart';
-import 'package:swaptime_flutter/module_profile/profile_module.dart';
-import 'package:swaptime_flutter/module_theme/service/theme_service/theme_service.dart';
 
 import 'di/components/app.component.dart';
 import 'generated/l10n.dart';
-import 'module_home/home.module.dart';
-import 'module_localization/service/localization_service/localization_service.dart';
-
-typedef Provider<T> = T Function();
+import 'module_auth/authoriazation_module.dart';
+import 'module_settings/settings_module.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then((_) async {
@@ -33,26 +29,18 @@ void main() async {
 
 @provide
 class MyApp extends StatefulWidget {
-  final HomeModule _homeModule;
-  final FormsModule _formsModule;
-  final ChatModule _chatModule;
-  final CameraModule _cameraModule;
-  final AuthModule _authModule;
-  final ProfileModule _profileModule;
-  final GamesModule _gamesModule;
+  final AppThemeDataService _themeDataService;
   final LocalizationService _localizationService;
-  final SwapThemeDataService _swapThemeService;
+  final ChatModule _chatModule;
+  final SettingsModule _settingsModule;
+  final AuthorizationModule _authorizationModule;
 
   MyApp(
-    this._homeModule,
-    this._formsModule,
-    this._gamesModule,
-    this._authModule,
-    this._chatModule,
-    this._cameraModule,
-    this._profileModule,
+    this._themeDataService,
     this._localizationService,
-    this._swapThemeService,
+    this._chatModule,
+    this._settingsModule,
+    this._authorizationModule,
   );
 
   @override
@@ -65,73 +53,73 @@ class _MyAppState extends State<MyApp> {
       FirebaseAnalyticsObserver(analytics: analytics);
 
   String lang;
-  bool isDarkMode;
+  ThemeData activeTheme;
+  bool authorized = false;
 
   @override
   void initState() {
     super.initState();
-
     widget._localizationService.localizationStream.listen((event) {
-      lang = event;
       setState(() {});
     });
 
-    widget._swapThemeService.darkModeStream.listen((event) {
-      isDarkMode = event;
-      print('Dark Mode: ' + isDarkMode.toString());
+    widget._themeDataService.darkModeStream.listen((event) {
+      activeTheme = event;
       setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    Map<String, WidgetBuilder> fullRoutesList = {};
-
-    fullRoutesList.addAll(widget._homeModule.getRoutes());
-    fullRoutesList.addAll(widget._formsModule.getRoutes());
+    var fullRoutesList = <String, WidgetBuilder>{};
+    fullRoutesList.addAll(widget._authorizationModule.getRoutes());
     fullRoutesList.addAll(widget._chatModule.getRoutes());
-    fullRoutesList.addAll(widget._authModule.getRoutes());
-    fullRoutesList.addAll(widget._cameraModule.getRoutes());
-    fullRoutesList.addAll(widget._profileModule.getRoutes());
-    fullRoutesList.addAll(widget._gamesModule.getRoutes());
+    fullRoutesList.addAll(widget._settingsModule.getRoutes());
+
+    // TODO: Plug your Module Here
 
     return FutureBuilder(
-      future: getConfiguratedApp(fullRoutesList),
-      builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-        if (snapshot.hasData) return snapshot.data;
-        return Scaffold();
+      initialData: ThemeData.light(),
+      future: widget._themeDataService.getActiveTheme(),
+      builder: (BuildContext context, AsyncSnapshot<ThemeData> themeSnapshot) {
+        return FutureBuilder(
+            initialData: 'en',
+            future: widget._localizationService.getLanguage(),
+            builder:
+                (BuildContext context, AsyncSnapshot<String> langSnapshot) {
+              return getConfiguratedApp(
+                fullRoutesList,
+                themeSnapshot.data,
+                langSnapshot.data,
+              );
+            });
       },
     );
   }
 
-  Future<Widget> getConfiguratedApp(
-      Map<String, WidgetBuilder> fullRoutesList) async {
-    lang ??= await widget._localizationService.getLanguage();
-    isDarkMode ??= await widget._swapThemeService.isDarkMode();
-    print(isDarkMode.toString());
-
+  Widget getConfiguratedApp(
+    Map<String, WidgetBuilder> fullRoutesList,
+    ThemeData theme,
+    String activeLanguage,
+  ) {
     return MaterialApp(
-        navigatorObservers: <NavigatorObserver>[observer],
-        locale: Locale.fromSubtags(
-          languageCode: lang ?? 'en',
-        ),
-        localizationsDelegates: [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        theme: isDarkMode == true
-            ? ThemeData(
-                brightness: Brightness.dark,
-              )
-            : ThemeData(
-                brightness: Brightness.light,
-                primaryColor: Colors.white,
-              ),
-        supportedLocales: S.delegate.supportedLocales,
-        title: 'Swaptime',
-        routes: fullRoutesList,
-        initialRoute: HomeRoutes.ROUTE_HOME);
+      debugShowCheckedModeBanner: false,
+      navigatorObservers: <NavigatorObserver>[observer],
+      locale: Locale.fromSubtags(
+        languageCode: activeLanguage,
+      ),
+      localizationsDelegates: [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      theme: theme,
+      supportedLocales: S.delegate.supportedLocales,
+      title: 'C4D Client',
+      routes: fullRoutesList,
+      // TODO: Plug Home Page Here
+      // initialRoute: OrdersRoutes.OWNER_ORDERS_SCREEN,
+    );
   }
 }

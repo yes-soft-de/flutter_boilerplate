@@ -1,7 +1,7 @@
 import 'package:analyzer_plugin/utilities/pair.dart';
 import 'package:inject/inject.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:swaptime_flutter/module_chat/model/chat/chat_model.dart';
+import 'package:c4d/module_chat/model/chat/chat_model.dart';
 
 import '../../service/chat/char_service.dart';
 
@@ -12,11 +12,13 @@ class ChatPageBloc {
   static const STATUS_CODE_GOT_DATA = 1590;
   static const STATUS_CODE_BUILDING_UI = 1591;
 
-  bool listening = false;
+  bool listening = true;
 
   final ChatService _chatService;
 
-  ChatPageBloc(this._chatService);
+  ChatPageBloc(
+    this._chatService,
+  );
 
   final PublishSubject<Pair<int, List<ChatModel>>> _chatBlocSubject =
       new PublishSubject();
@@ -38,6 +40,6 @@ class ChatPageBloc {
   }
 
   void dispose() {
-    _chatBlocSubject.close();
+    listening = false;
   }
 }

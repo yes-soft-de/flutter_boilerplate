@@ -1,19 +1,25 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:inject/inject.dart';
-import 'package:swaptime_flutter/generated/l10n.dart';
-import 'package:swaptime_flutter/module_chat/bloc/chat_page/chat_page.bloc.dart';
-import 'package:swaptime_flutter/module_chat/model/chat/chat_model.dart';
-import 'package:swaptime_flutter/module_chat/ui/widget/chat_bubble/chat_bubble.dart';
+import 'package:c4d/generated/l10n.dart';
+import 'package:c4d/module_auth/service/auth_service/auth_service.dart';
+import 'package:c4d/module_chat/bloc/chat_page/chat_page.bloc.dart';
+import 'package:c4d/module_chat/model/chat/chat_model.dart';
+import 'package:c4d/module_chat/ui/widget/chat_bubble/chat_bubble.dart';
+import 'package:c4d/module_chat/ui/widget/chat_writer/chat_writer.dart';
+import 'package:c4d/module_upload/service/image_upload/image_upload_service.dart';
 
 @provide
 class ChatPage extends StatefulWidget {
   final ChatPageBloc _chatPageBloc;
+  final AuthService _authService;
+  final ImageUploadService _uploadService;
 
-  ChatPage(this._chatPageBloc);
+  ChatPage(
+    this._chatPageBloc,
+    this._authService,
+    this._uploadService,
+  );
 
   @override
   State<StatefulWidget> createState() => ChatPageState();
@@ -23,23 +29,22 @@ class ChatPageState extends State<ChatPage> {
   List<ChatModel> _chatMessagesList = [];
   int currentState = ChatPageBloc.STATUS_CODE_INIT;
 
-  final TextEditingController _msgController = TextEditingController();
   List<ChatBubbleWidget> chatsMessagesWidgets = [];
-
+  
   String chatRoomId;
+
+  bool initiated = false;
 
   @override
   Widget build(BuildContext context) {
-    chatRoomId = ModalRoute.of(context).settings.arguments.toString();
+    chatRoomId = ModalRoute.of(context).settings.arguments;
 
     if (currentState == ChatPageBloc.STATUS_CODE_INIT) {
-      print('Chat Room: ' + chatRoomId);
       widget._chatPageBloc.getMessages(chatRoomId);
     }
 
     widget._chatPageBloc.chatBlocStream.listen((event) {
       currentState = event.first;
-      print('Got Event');
       if (event.first == ChatPageBloc.STATUS_CODE_GOT_DATA) {
         _chatMessagesList = event.last;
         if (chatsMessagesWidgets.length == _chatMessagesList.length) {
@@ -69,37 +74,11 @@ class ChatPageState extends State<ChatPage> {
                     child: Text(S.of(context).loading),
                   ),
           ),
-          Flex(
-            direction: Axis.horizontal,
-            children: <Widget>[
-              Flexible(
-                flex: 5,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: S.of(context).startWriting,
-                    ),
-                    controller: _msgController,
-                  ),
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                child: GestureDetector(
-                  onTap: () {
-                    sendMessage();
-                  },
-                  child: Container(
-                    height: 48,
-                    width: 48,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(90))),
-                    child: Icon(Icons.send),
-                  ),
-                ),
-              )
-            ],
+          ChatWriterWidget(
+            onMessageSend: (msg) {
+              widget._chatPageBloc.sendMessage(chatRoomId, msg);
+            },
+            uploadService: widget._uploadService,
           ),
         ],
       ),
@@ -111,20 +90,13 @@ class ChatPageState extends State<ChatPage> {
     FirebaseAuth auth = await FirebaseAuth.instance;
     User user = auth.currentUser;
     chatList.forEach((element) {
-      print(jsonEncode(element));
       newMessagesList.add(ChatBubbleWidget(
         message: element.msg,
         me: element.sender == user.uid ? true : false,
-        sentDate: DateTime.parse(element.sentDate),
+        sentDate: element.sentDate,
       ));
     });
     chatsMessagesWidgets = newMessagesList;
     return;
-  }
-
-  void sendMessage() {
-    log('Sending: ' + _msgController.text);
-    widget._chatPageBloc.sendMessage(chatRoomId, _msgController.text.trim());
-    _msgController.clear();
   }
 }

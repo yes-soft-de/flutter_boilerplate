@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:inject/inject.dart';
-import 'package:swaptime_flutter/module_chat/model/chat/chat_model.dart';
+import 'package:c4d/module_chat/model/chat/chat_model.dart';
 
 @provide
 class ChatRepository {
@@ -12,7 +12,7 @@ class ChatRepository {
         .doc(chatRoomID)
         .collection('messages')
         .orderBy('sentDate', descending: false)
-        .snapshots();
+        .snapshots(includeMetadataChanges: false);
   }
 
   void sendMessage(String chatRoomID, ChatModel chatMessage) {

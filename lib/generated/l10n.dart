@@ -9,6 +9,8 @@ import 'intl/messages_all.dart';
 // **************************************************************************
 
 // ignore_for_file: non_constant_identifier_names, lines_longer_than_80_chars
+// ignore_for_file: join_return_with_assignment, prefer_final_in_for_each
+// ignore_for_file: avoid_redundant_argument_values
 
 class S {
   S();
@@ -33,71 +35,41 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Enable Audio:`
-  String get enableAudio {
+  /// `Loading`
+  String get loading {
     return Intl.message(
-      'Enable Audio:',
-      name: 'enableAudio',
+      'Loading',
+      name: 'loading',
       desc: '',
       args: [],
     );
   }
 
-  /// `No camera found`
-  String get noCameraFound {
+  /// `Please Enter Your Email`
+  String get pleaseEnterYourEmail {
     return Intl.message(
-      'No camera found',
-      name: 'noCameraFound',
+      'Please Enter Your Email',
+      name: 'pleaseEnterYourEmail',
       desc: '',
       args: [],
     );
   }
 
-  /// `Error Loading Items!`
-  String get errorLoadingItems {
+  /// `I have an account`
+  String get iHaveAnAccount {
     return Intl.message(
-      'Error Loading Items!',
-      name: 'errorLoadingItems',
+      'I have an account',
+      name: 'iHaveAnAccount',
       desc: '',
       args: [],
     );
   }
 
-  /// `Retry`
-  String get retry {
+  /// `Error Happened`
+  String get errorHappened {
     return Intl.message(
-      'Retry',
-      name: 'retry',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Games List`
-  String get gamesList {
-    return Intl.message(
-      'Games List',
-      name: 'gamesList',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Request a Swap!`
-  String get requestASwap {
-    return Intl.message(
-      'Request a Swap!',
-      name: 'requestASwap',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Error Getting Swap Item id!`
-  String get errorGettingSwapItemId {
-    return Intl.message(
-      'Error Getting Swap Item id!',
-      name: 'errorGettingSwapItemId',
+      'Error Happened',
+      name: 'errorHappened',
       desc: '',
       args: [],
     );
@@ -113,91 +85,31 @@ class S {
     );
   }
 
-  /// `Empty List`
-  String get emptyList {
+  /// `Email Address is Required`
+  String get emailAddressIsRequired {
     return Intl.message(
-      'Empty List',
-      name: 'emptyList',
+      'Email Address is Required',
+      name: 'emailAddressIsRequired',
       desc: '',
       args: [],
     );
   }
 
-  /// `Phone Number`
-  String get phoneNumber {
+  /// `Captain`
+  String get captain {
     return Intl.message(
-      'Phone Number',
-      name: 'phoneNumber',
+      'Captain',
+      name: 'captain',
       desc: '',
       args: [],
     );
   }
 
-  /// `Please Input Phone Number`
-  String get pleaseInputPhoneNumber {
+  /// `Store Owner`
+  String get storeOwner {
     return Intl.message(
-      'Please Input Phone Number',
-      name: 'pleaseInputPhoneNumber',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Loading!`
-  String get loading {
-    return Intl.message(
-      'Loading!',
-      name: 'loading',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Send me a Code!`
-  String get sendMeACode {
-    return Intl.message(
-      'Send me a Code!',
-      name: 'sendMeACode',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Saudi Arabia`
-  String get saudiArabia {
-    return Intl.message(
-      'Saudi Arabia',
-      name: 'saudiArabia',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `USA`
-  String get usa {
-    return Intl.message(
-      'USA',
-      name: 'usa',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Lebanon`
-  String get lebanon {
-    return Intl.message(
-      'Lebanon',
-      name: 'lebanon',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Syria`
-  String get syria {
-    return Intl.message(
-      'Syria',
-      name: 'syria',
+      'Store Owner',
+      name: 'storeOwner',
       desc: '',
       args: [],
     );
@@ -223,241 +135,211 @@ class S {
     );
   }
 
-  /// `Be the First to Comment`
-  String get beTheFirstToComment {
+  /// `Accept Order`
+  String get acceptOrder {
     return Intl.message(
-      'Be the First to Comment',
-      name: 'beTheFirstToComment',
+      'Accept Order',
+      name: 'acceptOrder',
       desc: '',
       args: [],
     );
   }
 
-  /// `Search a Game :)`
-  String get searchAGame {
+  /// `I Arrived at the Store`
+  String get iArrivedAtTheStore {
     return Intl.message(
-      'Search a Game :)',
-      name: 'searchAGame',
+      'I Arrived at the Store',
+      name: 'iArrivedAtTheStore',
       desc: '',
       args: [],
     );
   }
 
-  /// `Add`
-  String get add {
+  /// `I Got the Package`
+  String get iGotThePackage {
     return Intl.message(
-      'Add',
-      name: 'add',
+      'I Got the Package',
+      name: 'iGotThePackage',
       desc: '',
       args: [],
     );
   }
 
-  /// `to my collection`
-  String get toMyCollection {
+  /// `I Got the Cash`
+  String get iGotTheCash {
     return Intl.message(
-      'to my collection',
-      name: 'toMyCollection',
+      'I Got the Cash',
+      name: 'iGotTheCash',
       desc: '',
       args: [],
     );
   }
 
-  /// `Please Upload the Image`
-  String get pleaseUploadTheImage {
+  /// `I Finished Delivering`
+  String get iFinishedDelivering {
     return Intl.message(
-      'Please Upload the Image',
-      name: 'pleaseUploadTheImage',
+      'I Finished Delivering',
+      name: 'iFinishedDelivering',
       desc: '',
       args: [],
     );
   }
 
-  /// `Submit Game!`
-  String get submitGame {
+  /// `Order is in undefined State`
+  String get orderIsInUndefinedState {
     return Intl.message(
-      'Submit Game!',
-      name: 'submitGame',
+      'Order is in undefined State',
+      name: 'orderIsInUndefinedState',
       desc: '',
       args: [],
     );
   }
 
-  /// `Upload Image`
-  String get uploadImage {
+  /// `Searching for Captain`
+  String get searchingForCaptain {
     return Intl.message(
-      'Upload Image',
-      name: 'uploadImage',
+      'Searching for Captain',
+      name: 'searchingForCaptain',
       desc: '',
       args: [],
     );
   }
 
-  /// `Empty Tag List`
-  String get emptyTagList {
+  /// `Captain is in the way`
+  String get captainIsInTheWay {
     return Intl.message(
-      'Empty Tag List',
-      name: 'emptyTagList',
+      'Captain is in the way',
+      name: 'captainIsInTheWay',
       desc: '',
       args: [],
     );
   }
 
-  /// `Insert via a Preset`
-  String get insertViaAPreset {
+  /// `Captain is in store`
+  String get captainIsInStore {
     return Intl.message(
-      'Insert via a Preset',
-      name: 'insertViaAPreset',
+      'Captain is in store',
+      name: 'captainIsInStore',
       desc: '',
       args: [],
     );
   }
 
-  /// `Insert via Camera`
-  String get insertViaCamera {
+  /// `Captain is Delivering`
+  String get captainIsDelivering {
     return Intl.message(
-      'Insert via Camera',
-      name: 'insertViaCamera',
+      'Captain is Delivering',
+      name: 'captainIsDelivering',
       desc: '',
       args: [],
     );
   }
 
-  /// `Home`
-  String get home {
+  /// `Captain got the cash`
+  String get captainGotTheCash {
     return Intl.message(
-      'Home',
-      name: 'home',
+      'Captain got the cash',
+      name: 'captainGotTheCash',
       desc: '',
       args: [],
     );
   }
 
-  /// `Notifications`
-  String get notifications {
+  /// `Order is done!`
+  String get orderIsDone {
     return Intl.message(
-      'Notifications',
-      name: 'notifications',
+      'Order is done!',
+      name: 'orderIsDone',
       desc: '',
       args: [],
     );
   }
 
-  /// `Favorite`
-  String get favorite {
+  /// `Please input phone number`
+  String get pleaseInputPhoneNumber {
     return Intl.message(
-      'Favorite',
-      name: 'favorite',
+      'Please input phone number',
+      name: 'pleaseInputPhoneNumber',
       desc: '',
       args: [],
     );
   }
 
-  /// `Profile`
-  String get profile {
+  /// `Confirm Code`
+  String get confirmCode {
     return Intl.message(
-      'Profile',
-      name: 'profile',
+      'Confirm Code',
+      name: 'confirmCode',
       desc: '',
       args: [],
     );
   }
 
-  /// `Settings`
-  String get settings {
+  /// `Resend Code`
+  String get resendCode {
     return Intl.message(
-      'Settings',
-      name: 'settings',
+      'Resend Code',
+      name: 'resendCode',
       desc: '',
       args: [],
     );
   }
 
-  /// `Feedback!`
-  String get feedback {
+  /// `Confirm`
+  String get confirm {
     return Intl.message(
-      'Feedback!',
-      name: 'feedback',
+      'Confirm',
+      name: 'confirm',
       desc: '',
       args: [],
     );
   }
 
-  /// `Feed`
-  String get feed {
+  /// `Saudi Arabia`
+  String get saudiArabia {
     return Intl.message(
-      'Feed',
-      name: 'feed',
+      'Saudi Arabia',
+      name: 'saudiArabia',
       desc: '',
       args: [],
     );
   }
 
-  /// `TOS`
-  String get tos {
+  /// `Lebanon`
+  String get lebanon {
     return Intl.message(
-      'TOS',
-      name: 'tos',
+      'Lebanon',
+      name: 'lebanon',
       desc: '',
       args: [],
     );
   }
 
-  /// `Privacy Policy`
-  String get privacyPolicy {
+  /// `Syria`
+  String get syria {
     return Intl.message(
-      'Privacy Policy',
-      name: 'privacyPolicy',
+      'Syria',
+      name: 'syria',
       desc: '',
       args: [],
     );
   }
 
-  /// `Set Exchange Game`
-  String get setExchangeGame {
+  /// `Phone Number`
+  String get phoneNumber {
     return Intl.message(
-      'Set Exchange Game',
-      name: 'setExchangeGame',
+      'Phone Number',
+      name: 'phoneNumber',
       desc: '',
       args: [],
     );
   }
 
-  /// `Start Chat`
-  String get startChat {
+  /// `Send me code`
+  String get sendMeCode {
     return Intl.message(
-      'Start Chat',
-      name: 'startChat',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Set Game`
-  String get setGame {
-    return Intl.message(
-      'Set Game',
-      name: 'setGame',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Username:`
-  String get username {
-    return Intl.message(
-      'Username:',
-      name: 'username',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Location`
-  String get location {
-    return Intl.message(
-      'Location',
-      name: 'location',
+      'Send me code',
+      name: 'sendMeCode',
       desc: '',
       args: [],
     );
@@ -483,26 +365,6 @@ class S {
     );
   }
 
-  /// `Not Logged in!`
-  String get notLoggedIn {
-    return Intl.message(
-      'Not Logged in!',
-      name: 'notLoggedIn',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Dark Mode`
-  String get darkMode {
-    return Intl.message(
-      'Dark Mode',
-      name: 'darkMode',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Login`
   String get login {
     return Intl.message(
@@ -513,101 +375,11 @@ class S {
     );
   }
 
-  /// `Empty Comment!`
-  String get emptyComment {
+  /// `Order Details`
+  String get orderDetails {
     return Intl.message(
-      'Empty Comment!',
-      name: 'emptyComment',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Save Profile`
-  String get saveProfile {
-    return Intl.message(
-      'Save Profile',
-      name: 'saveProfile',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Saving!`
-  String get saving {
-    return Intl.message(
-      'Saving!',
-      name: 'saving',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please Provide a short story about you :)`
-  String get pleaseProvideAShortStoryAboutYou {
-    return Intl.message(
-      'Please Provide a short story about you :)',
-      name: 'pleaseProvideAShortStoryAboutYou',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please Provide your Name :)`
-  String get pleaseProvideYourName {
-    return Intl.message(
-      'Please Provide your Name :)',
-      name: 'pleaseProvideYourName',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please Upload your Image :)`
-  String get pleaseUploadYourImage {
-    return Intl.message(
-      'Please Upload your Image :)',
-      name: 'pleaseUploadYourImage',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Uploading`
-  String get uploading {
-    return Intl.message(
-      'Uploading',
-      name: 'uploading',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Close`
-  String get close {
-    return Intl.message(
-      'Close',
-      name: 'close',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Comment`
-  String get comment {
-    return Intl.message(
-      'Comment',
-      name: 'comment',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `This Game is Great`
-  String get thisGameIsGreat {
-    return Intl.message(
-      'This Game is Great',
-      name: 'thisGameIsGreat',
+      'Order Details',
+      name: 'orderDetails',
       desc: '',
       args: [],
     );

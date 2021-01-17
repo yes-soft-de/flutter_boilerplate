@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:inject/inject.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:swaptime_flutter/module_chat/manager/chat/chat_manager.dart';
-import 'package:swaptime_flutter/module_chat/model/chat/chat_model.dart';
+import 'package:c4d/module_chat/manager/chat/chat_manager.dart';
+import 'package:c4d/module_chat/model/chat/chat_model.dart';
 
 @provide
 class ChatService {
@@ -14,7 +12,7 @@ class ChatService {
 
   // This is Real Time, That is Why I went this way
   final PublishSubject<List<ChatModel>> _chatPublishSubject =
-      new PublishSubject();
+  new PublishSubject();
 
   Stream<List<ChatModel>> get chatMessagesStream => _chatPublishSubject.stream;
 
@@ -23,7 +21,6 @@ class ChatService {
       List<ChatModel> chatMessagesList = [];
       event.docs.forEach((element) {
         chatMessagesList.add(new ChatModel.fromJson(element.data()));
-        print(jsonEncode(element.data()));
       });
 
       _chatPublishSubject.add(chatMessagesList);
@@ -34,8 +31,10 @@ class ChatService {
     FirebaseAuth auth = await FirebaseAuth.instance;
     User user = auth.currentUser;
     ChatModel model = new ChatModel(
-        msg: msg, sender: user.uid, sentDate: DateTime.now().toIso8601String());
-    await _chatManager.sendMessage(chatRoomID, model);
+      msg: msg,
+      sender: user.uid,
+      sentDate: DateTime.now().toIso8601String(),);
+    _chatManager.sendMessage(chatRoomID, model);
   }
 
   void dispose() {

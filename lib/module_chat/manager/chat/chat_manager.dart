@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:inject/inject.dart';
-import 'package:swaptime_flutter/module_chat/model/chat/chat_model.dart';
-import 'package:swaptime_flutter/module_chat/repository/chat/chat_repository.dart';
+import 'package:c4d/module_chat/model/chat/chat_model.dart';
+import 'package:c4d/module_chat/repository/chat/chat_repository.dart';
 
 @provide
 class ChatManager {

@@ -1,5 +1,5 @@
 {
-  "asset": "asset:swaptime_flutter/lib/module_theme/pressistance/theme_preferences_helper.dart",
+  "asset": "asset:c4d/lib/module_theme/pressistance/theme_preferences_helper.dart",
   "summary": {
     "injector": [],
     "module": [],
@@ -11,7 +11,7 @@
           "kind": "constructor",
           "injectedType": {
             "lookupKey": {
-              "root": "asset:swaptime_flutter/lib/module_theme/pressistance/theme_preferences_helper.dart#ThemePreferencesHelper",
+              "root": "asset:c4d/lib/module_theme/pressistance/theme_preferences_helper.dart#ThemePreferencesHelper",
               "qualifier": null
             },
             "isProvider": false

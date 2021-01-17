@@ -1,9 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:inject/inject.dart';
-import 'package:swaptime_flutter/consts/keys.dart';
-import 'package:swaptime_flutter/consts/urls.dart';
-import 'package:swaptime_flutter/module_upload/response/imgbb/imgbb_response.dart';
-import 'package:swaptime_flutter/utils/logger/logger.dart';
+import 'package:c4d/consts/urls.dart';
+import 'package:c4d/module_upload/response/imgbb/imgbb_response.dart';
+import 'package:c4d/utils/logger/logger.dart';
 
 @provide
 class UploadRepository {
@@ -16,15 +15,14 @@ class UploadRepository {
     Logger().info('UploadRepo', 'Uploading: ' + filePath);
 
     Response response = await client.post(
-      Urls.IMGBB,
+      Urls.API_UPLOAD,
       data: data,
-      queryParameters: {'key': ApiKeys.KEY_IMG_DB},
     );
     Logger().info('Got a Response', response.toString());
 
     if (response == null) {
       return null;
     }
-    return ImgBBResponse.fromJson(response.data);
+    return ImgBBResponse(url: response.data);
   }
 }

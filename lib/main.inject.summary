@@ -1,5 +1,5 @@
 {
-  "asset": "asset:swaptime_flutter/lib/main.dart",
+  "asset": "asset:c4d/lib/main.dart",
   "summary": {
     "injector": [],
     "module": [],
@@ -11,7 +11,7 @@
           "kind": "constructor",
           "injectedType": {
             "lookupKey": {
-              "root": "asset:swaptime_flutter/lib/main.dart#MyApp",
+              "root": "asset:c4d/lib/main.dart#MyApp",
               "qualifier": null
             },
             "isProvider": false
@@ -21,63 +21,49 @@
           "dependencies": [
             {
               "lookupKey": {
-                "root": "asset:swaptime_flutter/lib/module_home/home.module.dart#HomeModule",
+                "root": "asset:c4d/lib/module_theme/service/theme_service/theme_service.dart#AppThemeDataService",
                 "qualifier": null
               },
               "isProvider": false
             },
             {
               "lookupKey": {
-                "root": "asset:swaptime_flutter/lib/module_forms/forms_module.dart#FormsModule",
+                "root": "asset:c4d/lib/module_localization/service/localization_service/localization_service.dart#LocalizationService",
                 "qualifier": null
               },
               "isProvider": false
             },
             {
               "lookupKey": {
-                "root": "asset:swaptime_flutter/lib/games_module/games_module.dart#GamesModule",
+                "root": "asset:c4d/lib/module_orders/orders_module.dart#OrdersModule",
                 "qualifier": null
               },
               "isProvider": false
             },
             {
               "lookupKey": {
-                "root": "asset:swaptime_flutter/lib/module_auth/auth_module.dart#AuthModule",
+                "root": "asset:c4d/lib/module_chat/chat_module.dart#ChatModule",
                 "qualifier": null
               },
               "isProvider": false
             },
             {
               "lookupKey": {
-                "root": "asset:swaptime_flutter/lib/module_chat/chat_module.dart#ChatModule",
+                "root": "asset:c4d/lib/module_init/init_account_module.dart#InitAccountModule",
                 "qualifier": null
               },
               "isProvider": false
             },
             {
               "lookupKey": {
-                "root": "asset:swaptime_flutter/lib/camera/camera_module.dart#CameraModule",
+                "root": "asset:c4d/lib/module_settings/settings_module.dart#SettingsModule",
                 "qualifier": null
               },
               "isProvider": false
             },
             {
               "lookupKey": {
-                "root": "asset:swaptime_flutter/lib/module_profile/profile_module.dart#ProfileModule",
-                "qualifier": null
-              },
-              "isProvider": false
-            },
-            {
-              "lookupKey": {
-                "root": "asset:swaptime_flutter/lib/module_localization/service/localization_service/localization_service.dart#LocalizationService",
-                "qualifier": null
-              },
-              "isProvider": false
-            },
-            {
-              "lookupKey": {
-                "root": "asset:swaptime_flutter/lib/module_theme/service/theme_service/theme_service.dart#SwapThemeDataService",
+                "root": "asset:c4d/lib/module_auth/authoriazation_module.dart#AuthorizationModule",
                 "qualifier": null
               },
               "isProvider": false
