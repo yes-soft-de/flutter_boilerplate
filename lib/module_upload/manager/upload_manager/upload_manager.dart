@@ -1,13 +1,13 @@
-import 'package:inject/inject.dart';
-import 'package:c4d/module_upload/repository/upload_repository/upload_repository.dart';
-import 'package:c4d/module_upload/response/imgbb/imgbb_response.dart';
+import 'package:injectable/injectable.dart';
+import 'package:pasco_shipping/module_upload/repository/upload_repository/upload_repository.dart';
+import 'package:pasco_shipping/module_upload/response/imgbb/imgbb_response.dart';
 
-@provide
+@injectable
 class UploadManager {
   final UploadRepository _repository;
   UploadManager(this._repository);
 
-  Future<ImgBBResponse> upload(String filePath) {
+  Future<ImgBBResponse?> upload(String filePath) {
     return _repository.upload(filePath);
   }
 }

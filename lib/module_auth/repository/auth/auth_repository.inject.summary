@@ -1,5 +1,5 @@
 {
-  "asset": "asset:c4d/lib/module_auth/repository/auth/auth_repository.dart",
+  "asset": "asset:skeleton_null_safety2/lib/module_auth/repository/auth/auth_repository.dart",
   "summary": {
     "injector": [],
     "module": [],
@@ -11,7 +11,7 @@
           "kind": "constructor",
           "injectedType": {
             "lookupKey": {
-              "root": "asset:c4d/lib/module_auth/repository/auth/auth_repository.dart#AuthRepository",
+              "root": "asset:skeleton_null_safety2/lib/module_auth/repository/auth/auth_repository.dart#AuthRepository",
               "qualifier": null
             },
             "isProvider": false
@@ -21,7 +21,7 @@
           "dependencies": [
             {
               "lookupKey": {
-                "root": "asset:c4d/lib/module_network/http_client/http_client.dart#ApiClient",
+                "root": "asset:skeleton_null_safety2/lib/module_network/http_client/http_client.dart#ApiClient",
                 "qualifier": null
               },
               "isProvider": false

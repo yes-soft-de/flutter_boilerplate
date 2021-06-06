@@ -1,5 +1,5 @@
 {
-  "asset": "asset:c4d/lib/module_notifications/service/fire_notification_service/fire_notification_service.dart",
+  "asset": "asset:skeleton_null_safety2/lib/module_notifications/service/fire_notification_service/fire_notification_service.dart",
   "summary": {
     "injector": [],
     "module": [],
@@ -11,14 +11,29 @@
           "kind": "constructor",
           "injectedType": {
             "lookupKey": {
-              "root": "asset:c4d/lib/module_notifications/service/fire_notification_service/fire_notification_service.dart#FireNotificationService",
+              "root": "asset:skeleton_null_safety2/lib/module_notifications/service/fire_notification_service/fire_notification_service.dart#FireNotificationService",
               "qualifier": null
             },
             "isProvider": false
           },
           "singleton": false,
           "asynchronous": false,
-          "dependencies": []
+          "dependencies": [
+            {
+              "lookupKey": {
+                "root": "asset:skeleton_null_safety2/lib/module_notifications/preferences/notification_preferences/notification_preferences.dart#NotificationsPrefsHelper",
+                "qualifier": null
+              },
+              "isProvider": false
+            },
+            {
+              "lookupKey": {
+                "root": "asset:skeleton_null_safety2/lib/module_notifications/repository/notification_repo.dart#NotificationRepo",
+                "qualifier": null
+              },
+              "isProvider": false
+            }
+          ]
         }
       }
     ]

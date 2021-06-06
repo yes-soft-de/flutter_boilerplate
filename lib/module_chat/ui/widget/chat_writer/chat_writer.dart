@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:c4d/consts/urls.dart';
-import 'package:c4d/generated/l10n.dart';
-import 'package:c4d/module_upload/service/image_upload/image_upload_service.dart';
+import 'package:pasco_shipping/consts/urls.dart';
+import 'package:pasco_shipping/generated/l10n.dart';
+import 'package:pasco_shipping/module_upload/service/image_upload/image_upload_service.dart';
 
 class ChatWriterWidget extends StatefulWidget {
-  final Function(String) onMessageSend;
-  final ImageUploadService uploadService;
+  final Function(String)? onMessageSend;
+  final ImageUploadService? uploadService;
 
   ChatWriterWidget({
     this.onMessageSend,
@@ -24,7 +24,7 @@ class _ChatWriterWidget extends State<ChatWriterWidget> {
   final TextEditingController _msgController = TextEditingController();
   final ImagePicker _imagePicker = ImagePicker();
 
-  File imageFile;
+  File? imageFile;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class _ChatWriterWidget extends State<ChatWriterWidget> {
           children: [
             Positioned.fill(
               child: Image.file(
-                imageFile,
+                imageFile!,
                 fit: BoxFit.cover,
               ),
             ),
@@ -54,14 +54,16 @@ class _ChatWriterWidget extends State<ChatWriterWidget> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    widget.uploadService
-                        .uploadImage(imageFile.path)
+                    widget.uploadService!
+                        .uploadImage(imageFile!.path)
                         .then((value) {
                       imageFile = null;
-                      sendMessage(value.contains('http')
-                          ? value
-                          : Urls.IMAGES_ROOT + value);
-                      setState(() {});
+                      if (value != null) {
+                        sendMessage(value.contains('http')
+                            ? value
+                            : Urls.IMAGES_ROOT + value);
+                        setState(() {});
+                      }
                     });
                   },
                 ),
@@ -84,7 +86,7 @@ class _ChatWriterWidget extends State<ChatWriterWidget> {
                   _imagePicker
                       .getImage(source: ImageSource.gallery, imageQuality: 70)
                       .then((value) {
-                    imageFile = File(value.path);
+                    imageFile = File(value!.path);
                     setState(() {});
                   });
                 },
@@ -95,13 +97,14 @@ class _ChatWriterWidget extends State<ChatWriterWidget> {
                   _imagePicker
                       .getImage(source: ImageSource.camera, imageQuality: 70)
                       .then((value) {
-                    imageFile = File(value.path);
-                    setState(() {});
+                    if (value != null) {
+                      imageFile = File(value.path);
+                      setState(() {});
+                    }
                   });
                 },
               ),
             ],
-            onChanged: (value) {},
           ),
         ),
         Expanded(
@@ -112,14 +115,19 @@ class _ChatWriterWidget extends State<ChatWriterWidget> {
                 hintText: S.of(context).startWriting,
               ),
               controller: _msgController,
+              onChanged: (s) {
+                setState(() {});
+              },
             ),
           ),
         ),
         IconButton(
           padding: EdgeInsets.all(4),
-          onPressed: () {
-            sendMessage(_msgController.text.trim());
-          },
+          onPressed: _msgController.text.trim().isNotEmpty
+              ? () {
+                  sendMessage(_msgController.text.trim());
+                }
+              : null,
           icon: Icon(Icons.send),
         )
       ],
@@ -127,7 +135,7 @@ class _ChatWriterWidget extends State<ChatWriterWidget> {
   }
 
   void sendMessage(String msg) {
-    widget.onMessageSend(msg);
+    widget.onMessageSend!(msg);
     _msgController.clear();
   }
 }

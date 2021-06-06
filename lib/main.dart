@@ -1,6 +1,18 @@
-import 'package:c4d/module_chat/chat_module.dart';
-import 'package:c4d/module_localization/service/localization_service/localization_service.dart';
-import 'package:c4d/module_theme/service/theme_service/theme_service.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:analyzer_plugin/protocol/protocol.dart';
+import 'package:injectable/injectable.dart';
+import 'package:pasco_shipping/abstracts/module/yes_module.dart';
+import 'package:pasco_shipping/di/di_config.dart';
+import 'package:pasco_shipping/module_auth/authoriazation_module.dart';
+import 'package:pasco_shipping/module_chat/chat_module.dart';
+import 'package:pasco_shipping/module_localization/service/localization_service/localization_service.dart';
+import 'package:pasco_shipping/module_notifications/model/notification_model.dart';
+import 'package:pasco_shipping/module_notifications/service/fire_notification_service/fire_notification_service.dart';
+import 'package:pasco_shipping/module_settings/settings_module.dart';
+import 'package:pasco_shipping/module_splash/splash_module.dart';
+import 'package:pasco_shipping/module_theme/service/theme_service/theme_service.dart';
+import 'package:pasco_shipping/utils/logger/logger.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,39 +20,58 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:inject/inject.dart';
-
-import 'di/components/app.component.dart';
 import 'generated/l10n.dart';
-import 'module_auth/authoriazation_module.dart';
-import 'module_settings/settings_module.dart';
+import 'module_notifications/service/local_notification_service/local_notification_service.dart';
+import 'module_splash/splash_routes.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  timeago.setLocaleMessages('ar', timeago.ArMessages());
+  timeago.setLocaleMessages('en', timeago.EnMessages());
   await Firebase.initializeApp();
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FirebaseCrashlytics.instance.recordFlutterError(details);
+  };
+
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then((_) async {
-    final container = await AppComponent.create();
-    runApp(container.app);
+    FlutterError.onError = (FlutterErrorDetails details) async {
+      Logger().error('Main', details.toString(), StackTrace.current);
+    };
+    await runZoned<Future<void>>(() async {
+      configureDependencies();
+      // Your App Here
+      runApp(getIt<MyApp>());
+    }, onError: (error, stackTrace) {
+      new Logger().error(
+          'Main', error.toString() + stackTrace.toString(), StackTrace.current);
+    });
   });
 }
 
-@provide
+@injectable
 class MyApp extends StatefulWidget {
   final AppThemeDataService _themeDataService;
   final LocalizationService _localizationService;
-  final ChatModule _chatModule;
-  final SettingsModule _settingsModule;
+  final FireNotificationService _fireNotificationService;
+  final LocalNotificationService _localNotificationService;
+  final SplashModule _splashModule;
   final AuthorizationModule _authorizationModule;
+  final SettingsModule _settingsModule;
+  final ChatModule _chatModule;
 
   MyApp(
     this._themeDataService,
     this._localizationService,
+    this._fireNotificationService,
+    this._localNotificationService,
+    this._splashModule,
+    this._authorizationModule,
     this._chatModule,
     this._settingsModule,
-    this._authorizationModule,
   );
 
   @override
@@ -52,56 +83,49 @@ class _MyAppState extends State<MyApp> {
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);
 
-  String lang;
-  ThemeData activeTheme;
-  bool authorized = false;
+  //Initialisation of local notification
 
+  //end
+  late String lang;
+  late ThemeData activeTheme;
+  bool authorized = false;
+  late StreamSubscription streamSubscription;
   @override
   void initState() {
     super.initState();
+    widget._fireNotificationService.init();
+    widget._localNotificationService.init();
     widget._localizationService.localizationStream.listen((event) {
+      timeago.setDefaultLocale(event);
       setState(() {});
     });
+    widget._fireNotificationService.onNotificationStream.listen((event) {
+      widget._localNotificationService.showNotification(event);
+    });
+    widget._localNotificationService.onLocalNotificationStream
+        .listen((event) {});
 
     widget._themeDataService.darkModeStream.listen((event) {
       activeTheme = event;
       setState(() {});
     });
   }
-
   @override
   Widget build(BuildContext context) {
-    var fullRoutesList = <String, WidgetBuilder>{};
-    fullRoutesList.addAll(widget._authorizationModule.getRoutes());
-    fullRoutesList.addAll(widget._chatModule.getRoutes());
-    fullRoutesList.addAll(widget._settingsModule.getRoutes());
-
-    // TODO: Plug your Module Here
-
     return FutureBuilder(
-      initialData: ThemeData.light(),
-      future: widget._themeDataService.getActiveTheme(),
-      builder: (BuildContext context, AsyncSnapshot<ThemeData> themeSnapshot) {
-        return FutureBuilder(
-            initialData: 'en',
-            future: widget._localizationService.getLanguage(),
-            builder:
-                (BuildContext context, AsyncSnapshot<String> langSnapshot) {
-              return getConfiguratedApp(
-                fullRoutesList,
-                themeSnapshot.data,
-                langSnapshot.data,
-              );
-            });
+      initialData: Scaffold(),
+      future: getConfiguratedApp(YesModule.RoutesMap),
+      builder: (BuildContext context, AsyncSnapshot<Widget> scaffoldSnapshot) {
+        return scaffoldSnapshot.data!;
       },
     );
   }
 
-  Widget getConfiguratedApp(
+  Future<Widget> getConfiguratedApp(
     Map<String, WidgetBuilder> fullRoutesList,
-    ThemeData theme,
-    String activeLanguage,
-  ) {
+  ) async {
+    var activeLanguage = await widget._localizationService.getLanguage();
+    var theme = await widget._themeDataService.getActiveTheme();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorObservers: <NavigatorObserver>[observer],
@@ -116,10 +140,9 @@ class _MyAppState extends State<MyApp> {
       ],
       theme: theme,
       supportedLocales: S.delegate.supportedLocales,
-      title: 'C4D Client',
+      title: 'pasco-shipping',
       routes: fullRoutesList,
-      // TODO: Plug Home Page Here
-      // initialRoute: OrdersRoutes.OWNER_ORDERS_SCREEN,
+      initialRoute: SplashRoutes.SPLASH_SCREEN,
     );
   }
 }

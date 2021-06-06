@@ -1,9 +1,10 @@
-import 'package:c4d/module_auth/enums/auth_source.dart';
-import 'package:c4d/module_auth/enums/user_type.dart';
-import 'package:inject/inject.dart';
+import 'package:injectable/injectable.dart';
+import 'package:pasco_shipping/module_auth/enums/auth_source.dart';
+import 'package:pasco_shipping/module_auth/enums/user_type.dart';
+import 'package:pasco_shipping/module_auth/exceptions/auth_exception.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-@provide
+@injectable
 class AuthPrefsHelper {
   Future<void> setUserId(String userId) async {
     SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
@@ -11,111 +12,131 @@ class AuthPrefsHelper {
     return;
   }
 
-  Future<String> getUserId() async {
+  Future<String?> getUserId() async {
     SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
     return preferencesHelper.getString('uid');
   }
 
   Future<void> setUsername(String username) async {
     SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
-    return preferencesHelper.setString('username', username);
+    preferencesHelper.setString('username', username);
   }
 
-  Future<String> getUsername() async {
+  Future<String?> getUsername() async {
     SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
     return preferencesHelper.getString('username');
   }
 
   Future<void> setEmail(String email) async {
     SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
-    return preferencesHelper.setString('email', email);
+    preferencesHelper.setString('email', email);
   }
 
-  Future<String> getEmail() async {
+  Future<String?> getEmail() async {
     SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
     return preferencesHelper.getString('email');
   }
 
   Future<void> setPassword(String password) async {
     SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
-    return preferencesHelper.setString('password', password);
+    preferencesHelper.setString('password', password);
   }
 
-  Future<String> getPassword() async {
+  Future<String?> getPassword() async {
     SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
     return preferencesHelper.getString('password');
   }
 
   Future<bool> isSignedIn() async {
-    String uid = await getToken();
-    return uid != null;
-  }
-
-  Future<AUTH_SOURCE> getAuthSource() async {
-    SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
-    return preferencesHelper.getInt('auth_source') as AUTH_SOURCE;
-  }
-
-  Future<void> setAuthSource(AUTH_SOURCE authSource) async {
-    SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
-    return preferencesHelper.setInt(
-      'auth_source',
-      authSource == null ? null : authSource.index,
-    );
-  }
-
-  Future<void> setToken(String token) async {
-    if (token == null) {
-      return;
+    try {
+      String uid = await getToken();
+      return uid != null;
+    } catch (e) {
+      return false;
     }
-    SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
-    await preferencesHelper.setString(
-      'token',
-      token,
-    );
-    await preferencesHelper.setString(
-        'token_date', DateTime.now().toIso8601String());
   }
 
-  Future<String> getToken() async {
+  Future<AuthSource?> getAuthSource() async {
     SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
-    var tokenDateString = preferencesHelper.getString('token_date');
-    if (tokenDateString == null) {
-      return null;
+    int? index = preferencesHelper.getInt('auth_source');
+    if (index != null) {
+      return AuthSource.values[index];
+    } else {}
+  }
+
+  Future<void> setAuthSource([AuthSource? authSource]) async {
+    SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
+    if (authSource != null) {
+      preferencesHelper.setInt(
+        'auth_source',
+        authSource.index,
+      );
     }
-    if (DateTime.parse(tokenDateString).difference(DateTime.now()) >
-        Duration(minutes: 55)) {
-      await preferencesHelper.remove('token');
-      await preferencesHelper.remove('token_date');
-      return null;
-    }
-    return preferencesHelper.getString('token');
   }
 
-  Future<String> getTokenDate() async {
+  /// @Function saves token string
+  /// @returns void
+  Future<void> setToken(String? token) async {
     SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
-    return preferencesHelper.get('token_date');
+    if (token != null) {
+      await preferencesHelper.setString(
+        'token',
+        token,
+      );
+      await preferencesHelper.setString(
+        'token_date',
+        DateTime.now().toIso8601String(),
+      );
+    }
   }
 
-  Future<void> clearPrefs() async {
+  Future<void> deleteToken() async {
+    SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
+    await preferencesHelper.remove('token');
+    await preferencesHelper.remove('token_date');
+  }
+
+  Future<void> cleanAll() async {
     SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
     await preferencesHelper.clear();
   }
 
-  Future<void> setCurrentRole(USER_TYPE user_type) async {
+  /// @return String Token String
+  /// @throw Unauthorized Exception when token is null
+  Future<String> getToken() async {
+    SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
+    var token = await preferencesHelper.getString('token');
+    if (token == null) {
+      throw UnauthorizedException('Token not found');
+    }
+    return token;
+  }
+
+  /// @return DateTime tokenDate
+  /// @throw UnauthorizedException when token date not found
+  Future<DateTime> getTokenDate() async {
+    SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
+    var dateStr = await preferencesHelper.getString('token_date');
+    if (dateStr == null) {
+      throw UnauthorizedException('Token date not found');
+    }
+    return DateTime.parse(dateStr);
+  }
+
+  /// @return void
+  Future<void> setCurrentRole(UserRole user_type) async {
     SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
     await preferencesHelper.setInt('role', user_type.index);
-    return;
   }
 
-  Future<USER_TYPE> getCurrentRole() async {
+  /// @return UserType
+  /// @throw UnauthorizedException when no role is set
+  Future<UserRole> getCurrentRole() async {
     SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
-    var type = await  preferencesHelper.getInt('role');
-    return USER_TYPE.values[type];
-  }
-
-  Future<bool> getIsCaptain() async {
-    SharedPreferences preferencesHelper = await SharedPreferences.getInstance();
-    return preferencesHelper.getBool('is_captain');
+    var type = await preferencesHelper.getInt('role');
+    if (type == null) {
+      throw UnauthorizedException('User Role not found');
+    }
+    return UserRole.values[type];
   }
 }

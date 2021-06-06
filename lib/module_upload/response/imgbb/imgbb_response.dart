@@ -1,5 +1,5 @@
 class ImgBBResponse {
-  String url;
+  String? url;
 
   ImgBBResponse({this.url});
 }

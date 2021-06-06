@@ -1,5 +1,5 @@
 {
-  "asset": "asset:c4d/lib/module_auth/presistance/auth_prefs_helper.dart",
+  "asset": "asset:skeleton_null_safety2/lib/module_auth/presistance/auth_prefs_helper.dart",
   "summary": {
     "injector": [],
     "module": [],
@@ -11,7 +11,7 @@
           "kind": "constructor",
           "injectedType": {
             "lookupKey": {
-              "root": "asset:c4d/lib/module_auth/presistance/auth_prefs_helper.dart#AuthPrefsHelper",
+              "root": "asset:skeleton_null_safety2/lib/module_auth/presistance/auth_prefs_helper.dart#AuthPrefsHelper",
               "qualifier": null
             },
             "isProvider": false

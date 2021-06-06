@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ChatBubbleWidget extends StatefulWidget {
-  final bool showImage;
-  final String message;
-  final String sentDate;
+  final bool? showImage;
+  final String? message;
+  final DateTime? sentDate;
   final bool me;
 
   ChatBubbleWidget({
-    Key key,
+    Key? key,
     this.message,
     this.sentDate,
-    this.me,
+    required this.me,
     this.showImage,
   });
 
@@ -22,7 +22,7 @@ class ChatBubbleWidget extends StatefulWidget {
 
 class ChatBubbleWidgetState extends State<ChatBubbleWidget> {
   bool focused = false;
-
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,9 +43,13 @@ class ChatBubbleWidgetState extends State<ChatBubbleWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(timeago.format(DateTime.parse(widget.sentDate))),
-                widget.message.contains('http')
-                    ? Image.network(widget.message)
+                Text(
+                  timeago.format(widget.sentDate ?? DateTime.now(),locale:Localizations.localeOf(context).languageCode),
+                
+                ),
+                widget.message!.contains('http')
+                    ? Image.network(widget.message
+                        !.replaceFirst('uploadimage', 'upload/image'))
                     : Text(
                         '${widget.message}',
                         style: TextStyle(

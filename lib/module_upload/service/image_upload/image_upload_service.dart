@@ -1,15 +1,15 @@
-import 'package:inject/inject.dart';
-import 'package:c4d/module_upload/manager/upload_manager/upload_manager.dart';
-import 'package:c4d/module_upload/response/imgbb/imgbb_response.dart';
+import 'package:injectable/injectable.dart';
+import 'package:pasco_shipping/module_upload/manager/upload_manager/upload_manager.dart';
+import 'package:pasco_shipping/module_upload/response/imgbb/imgbb_response.dart';
 
-@provide
+@injectable
 class ImageUploadService {
-  final UploadManager manager;
+  final UploadManager _manager;
 
-  ImageUploadService(this.manager);
+  ImageUploadService(this._manager);
 
-  Future<String> uploadImage(String filePath) async {
-    ImgBBResponse response = await manager.upload(filePath);
+  Future<String?> uploadImage(String filePath) async {
+    ImgBBResponse? response = await _manager.upload(filePath);
     if (response == null) {
       return null;
     } else {

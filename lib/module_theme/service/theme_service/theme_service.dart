@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:inject/inject.dart';
+import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:c4d/module_theme/pressistance/theme_preferences_helper.dart';
+import 'package:pasco_shipping/module_theme/pressistance/theme_preferences_helper.dart';
 
-@provide
+@injectable
 class AppThemeDataService {
   static final PublishSubject<ThemeData> _darkModeSubject =
       PublishSubject<ThemeData>();
+
   Stream<ThemeData> get darkModeStream => _darkModeSubject.stream;
 
   final ThemePreferencesHelper _preferencesHelper;
@@ -36,7 +36,10 @@ class AppThemeDataService {
         accentColor: AccentColor,
         appBarTheme: AppBarTheme(
           centerTitle: true,
+          textTheme: TextTheme(),
+          brightness: Brightness.dark,
           color: Colors.black,
+          iconTheme: IconThemeData(color: Colors.white),
         ),
       );
     }
@@ -45,10 +48,7 @@ class AppThemeDataService {
       primaryColor: PrimaryColor,
       primaryColorDark: PrimaryDarker,
       accentColor: AccentColor,
-      appBarTheme: AppBarTheme(
-        centerTitle: true,
-        color: Colors.white,
-      ),
+      appBarTheme: AppBarTheme(centerTitle: true, color: Colors.white),
     );
   }
 

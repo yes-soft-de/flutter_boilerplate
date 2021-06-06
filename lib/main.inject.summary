@@ -1,5 +1,5 @@
 {
-  "asset": "asset:c4d/lib/main.dart",
+  "asset": "asset:skeleton_null_safety2/lib/main.dart",
   "summary": {
     "injector": [],
     "module": [],
@@ -11,7 +11,7 @@
           "kind": "constructor",
           "injectedType": {
             "lookupKey": {
-              "root": "asset:c4d/lib/main.dart#MyApp",
+              "root": "asset:skeleton_null_safety2/lib/main.dart#MyApp",
               "qualifier": null
             },
             "isProvider": false
@@ -21,49 +21,56 @@
           "dependencies": [
             {
               "lookupKey": {
-                "root": "asset:c4d/lib/module_theme/service/theme_service/theme_service.dart#AppThemeDataService",
+                "root": "asset:skeleton_null_safety2/lib/module_theme/service/theme_service/theme_service.dart#AppThemeDataService",
                 "qualifier": null
               },
               "isProvider": false
             },
             {
               "lookupKey": {
-                "root": "asset:c4d/lib/module_localization/service/localization_service/localization_service.dart#LocalizationService",
+                "root": "asset:skeleton_null_safety2/lib/module_localization/service/localization_service/localization_service.dart#LocalizationService",
                 "qualifier": null
               },
               "isProvider": false
             },
             {
               "lookupKey": {
-                "root": "asset:c4d/lib/module_orders/orders_module.dart#OrdersModule",
+                "root": "asset:skeleton_null_safety2/lib/module_notifications/service/fire_notification_service/fire_notification_service.dart#FireNotificationService",
                 "qualifier": null
               },
               "isProvider": false
             },
             {
               "lookupKey": {
-                "root": "asset:c4d/lib/module_chat/chat_module.dart#ChatModule",
+                "root": "asset:skeleton_null_safety2/lib/module_notifications/service/local_notification_service/local_notification_service.dart#LocalNotificationService",
                 "qualifier": null
               },
               "isProvider": false
             },
             {
               "lookupKey": {
-                "root": "asset:c4d/lib/module_init/init_account_module.dart#InitAccountModule",
+                "root": "asset:skeleton_null_safety2/lib/module_splash/splash_module.dart#SplashModule",
                 "qualifier": null
               },
               "isProvider": false
             },
             {
               "lookupKey": {
-                "root": "asset:c4d/lib/module_settings/settings_module.dart#SettingsModule",
+                "root": "asset:skeleton_null_safety2/lib/module_auth/authoriazation_module.dart#AuthorizationModule",
                 "qualifier": null
               },
               "isProvider": false
             },
             {
               "lookupKey": {
-                "root": "asset:c4d/lib/module_auth/authoriazation_module.dart#AuthorizationModule",
+                "root": "asset:skeleton_null_safety2/lib/module_chat/chat_module.dart#ChatModule",
+                "qualifier": null
+              },
+              "isProvider": false
+            },
+            {
+              "lookupKey": {
+                "root": "asset:skeleton_null_safety2/lib/module_settings/settings_module.dart#SettingsModule",
                 "qualifier": null
               },
               "isProvider": false

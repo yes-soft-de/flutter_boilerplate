@@ -1,5 +1,5 @@
 {
-  "asset": "asset:c4d/lib/module_localization/service/localization_service/localization_service.dart",
+  "asset": "asset:skeleton_null_safety2/lib/module_localization/service/localization_service/localization_service.dart",
   "summary": {
     "injector": [],
     "module": [],
@@ -11,7 +11,7 @@
           "kind": "constructor",
           "injectedType": {
             "lookupKey": {
-              "root": "asset:c4d/lib/module_localization/service/localization_service/localization_service.dart#LocalizationService",
+              "root": "asset:skeleton_null_safety2/lib/module_localization/service/localization_service/localization_service.dart#LocalizationService",
               "qualifier": null
             },
             "isProvider": false
@@ -21,7 +21,7 @@
           "dependencies": [
             {
               "lookupKey": {
-                "root": "asset:c4d/lib/module_localization/presistance/localization_preferences_helper/localization_preferences_helper.dart#LocalizationPreferencesHelper",
+                "root": "asset:skeleton_null_safety2/lib/module_localization/presistance/localization_preferences_helper/localization_preferences_helper.dart#LocalizationPreferencesHelper",
                 "qualifier": null
               },
               "isProvider": false

@@ -1,50 +1,70 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:dio/dio.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:injectable/injectable.dart';
+import 'package:pasco_shipping/module_notifications/preferences/notification_preferences/notification_preferences.dart';
+import 'package:pasco_shipping/module_notifications/repository/notification_repo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:inject/inject.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:c4d/consts/urls.dart';
-import 'package:c4d/module_network/http_client/http_client.dart';
-import 'package:c4d/utils/logger/logger.dart';
+import 'package:pasco_shipping/utils/logger/logger.dart';
 
-@provide
+@injectable
 class FireNotificationService {
+  final NotificationsPrefsHelper _prefsHelper;
+  final NotificationRepo _notificationRepo;
 
-  static final PublishSubject<String> _onNotificationRecieved =
+  FireNotificationService(
+    this._prefsHelper,
+    this._notificationRepo,
+  );
+
+  static final PublishSubject<RemoteMessage> _onNotificationRecieved =
       PublishSubject();
-  static Stream get onNotificationStream => _onNotificationRecieved.stream;
 
-  static StreamSubscription iosSubscription;
-  final FirebaseMessaging _fcm = FirebaseMessaging();
+  Stream get onNotificationStream => _onNotificationRecieved.stream;
+
+  static StreamSubscription? iosSubscription;
+
+  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   Future<void> init() async {
-    if (Platform.isIOS) {
-      iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {});
+    await _fcm.requestPermission();
+    await _fcm.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    var isActive = await _prefsHelper.getIsActive();
+    await refreshNotificationToken();
+    await setCaptainActive(isActive == true);
 
-      _fcm.requestNotificationPermissions(IosNotificationSettings());
+  }
+
+  Future<void> refreshNotificationToken() async {
+    var token = await _fcm.getToken();
+    if (token != null) {
+      // And Subscribe to the changes
+      try {
+        _notificationRepo.postToken(token);
+      } catch (e) {}
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        Logger().info('FireNotificationService', 'onMessage: $message');
+        _onNotificationRecieved.add(message);
+      });
+      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     }
   }
 
-  Future<void> refreshNotificationToken(String userAuthToken) async {
-    var token = await _fcm.getToken();
-    print('Token: $token');
-    if (token != null && userAuthToken != null) {
-
-      // And Subscribe to the changes
-      this._fcm.configure(
-        onMessage: (Map<String, dynamic> message) async {
-          Logger().info('FireNotificationService', 'onMessage: $message');
-          _onNotificationRecieved.add(message.toString());
-        },
-        onLaunch: (Map<String, dynamic> message) async {
-          Logger().info('FireNotificationService', 'onMessage: $message');
-        },
-        onResume: (Map<String, dynamic> message) async {
-          Logger().info('FireNotificationService', 'onMessage: $message');
-        },
-      );
+  Future<void> setCaptainActive(bool active) async {
+    await _prefsHelper.setIsActive(active);
+    if (active) {
+      await _fcm.subscribeToTopic('captains');
+    } else {
+      await _fcm.unsubscribeFromTopic('captains');
     }
+  }
+  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    Logger().info('FireNotificationService', 'onMessage: $message');
+    _onNotificationRecieved.add(message);
   }
 }

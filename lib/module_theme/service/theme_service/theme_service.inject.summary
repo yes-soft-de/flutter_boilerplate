@@ -1,5 +1,5 @@
 {
-  "asset": "asset:c4d/lib/module_theme/service/theme_service/theme_service.dart",
+  "asset": "asset:skeleton_null_safety2/lib/module_theme/service/theme_service/theme_service.dart",
   "summary": {
     "injector": [],
     "module": [],
@@ -11,7 +11,7 @@
           "kind": "constructor",
           "injectedType": {
             "lookupKey": {
-              "root": "asset:c4d/lib/module_theme/service/theme_service/theme_service.dart#AppThemeDataService",
+              "root": "asset:skeleton_null_safety2/lib/module_theme/service/theme_service/theme_service.dart#AppThemeDataService",
               "qualifier": null
             },
             "isProvider": false
@@ -21,7 +21,7 @@
           "dependencies": [
             {
               "lookupKey": {
-                "root": "asset:c4d/lib/module_theme/pressistance/theme_preferences_helper.dart#ThemePreferencesHelper",
+                "root": "asset:skeleton_null_safety2/lib/module_theme/pressistance/theme_preferences_helper.dart#ThemePreferencesHelper",
                 "qualifier": null
               },
               "isProvider": false

@@ -1,8 +1,9 @@
-import 'package:inject/inject.dart';
+import 'dart:io';
+import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:c4d/module_localization/presistance/localization_preferences_helper/localization_preferences_helper.dart';
+import 'package:pasco_shipping/module_localization/presistance/localization_preferences_helper/localization_preferences_helper.dart';
 
-@provide
+@injectable
 @singleton
 class LocalizationService {
   static final PublishSubject<String> _localizationSubject =
@@ -17,8 +18,8 @@ class LocalizationService {
   }
 
   Future<String> getLanguage() async {
-    String lang = await _preferencesHelper.getLanguage();
-    lang ??= 'en';
+    String? lang = await _preferencesHelper.getLanguage();
+    lang ??= Platform.localeName.substring(0, 2);
     return lang;
   }
 

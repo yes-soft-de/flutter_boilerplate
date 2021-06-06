@@ -1,5 +1,5 @@
 {
-  "asset": "asset:c4d/lib/module_chat/repository/chat/chat_repository.dart",
+  "asset": "asset:skeleton_null_safety2/lib/module_chat/repository/chat/chat_repository.dart",
   "summary": {
     "injector": [],
     "module": [],
@@ -11,14 +11,29 @@
           "kind": "constructor",
           "injectedType": {
             "lookupKey": {
-              "root": "asset:c4d/lib/module_chat/repository/chat/chat_repository.dart#ChatRepository",
+              "root": "asset:skeleton_null_safety2/lib/module_chat/repository/chat/chat_repository.dart#ChatRepository",
               "qualifier": null
             },
             "isProvider": false
           },
           "singleton": false,
           "asynchronous": false,
-          "dependencies": []
+          "dependencies": [
+            {
+              "lookupKey": {
+                "root": "asset:skeleton_null_safety2/lib/module_network/http_client/http_client.dart#ApiClient",
+                "qualifier": null
+              },
+              "isProvider": false
+            },
+            {
+              "lookupKey": {
+                "root": "asset:skeleton_null_safety2/lib/module_auth/service/auth_service/auth_service.dart#AuthService",
+                "qualifier": null
+              },
+              "isProvider": false
+            }
+          ]
         }
       }
     ]

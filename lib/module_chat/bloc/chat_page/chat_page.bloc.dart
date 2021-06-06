@@ -1,11 +1,11 @@
 import 'package:analyzer_plugin/utilities/pair.dart';
-import 'package:inject/inject.dart';
+import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:c4d/module_chat/model/chat/chat_model.dart';
+import 'package:pasco_shipping/module_chat/model/chat/chat_model.dart';
 
 import '../../service/chat/char_service.dart';
 
-@provide
+@injectable
 class ChatPageBloc {
   static const STATUS_CODE_INIT = 1588;
   static const STATUS_CODE_EMPTY_LIST = 1589;
@@ -35,8 +35,8 @@ class ChatPageBloc {
     _chatService.requestMessages(chatRoomID);
   }
 
-  void sendMessage(String chatRoomID, String chat) {
-    _chatService.sendMessage(chatRoomID, chat);
+  void sendMessage(String chatRoomID, String chat, bool support , bool feedBack ) {
+    _chatService.sendMessage(chatRoomID, chat,support,feedBack);
   }
 
   void dispose() {

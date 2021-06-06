@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:inject/inject.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-@provide
+@injectable
 class ThemePreferencesHelper {
   Future<void> setDarkMode() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -16,7 +15,7 @@ class ThemePreferencesHelper {
 
   Future<bool> isDarkMode() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    bool dark = await preferences.getBool('dark');
+    bool? dark = preferences.getBool('dark');
     return dark == true;
   }
 }
